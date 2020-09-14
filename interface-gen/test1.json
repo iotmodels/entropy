@@ -1,0 +1,27 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:net:goldustries:scanningcomputersensor;1",
+  "@type": "Interface",
+  "displayName": "Scanningcomputersensor",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "temperature",
+      "schema": "integer"
+    },
+    {
+      "@type": "Component",
+      "name": "laptopcomputerizedprobepack",
+      "schema": "dtmi:gov:shadowhouse:laptopcomputerizedprobepack;1",
+      "displayName": "laptopcomputerizedprobepack",
+      "description": "laptopcomputerizedprobepack"
+    },
+    {
+      "@type": "Component",
+      "name": "laptopcomputerizedprobepack2",
+      "schema": "dtmi:com:blossomotors:laptopcomputerizedprobepack;1",
+      "displayName": "laptopcomputerizedprobepack2",
+      "description": "laptopcomputerizedprobepack2"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.6.0"/>
+    <PackageReference Include="Microsoft.Azure.DigitalTwins.Parser" Version="3.12.4"/>
+    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.3.0-alpha.20427.1"/>
+    <PackageReference Include="System.Text.Json" Version="5.0.0-preview.8.20407.11"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="3.1.8"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.8"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.8"/>
+    <None Update="modelMetadata.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,41 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:example:thermostat;3",
+  "@type": "Interface",
+  "displayName": "Thermostat",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "temperature",
+      "schema": "double"
+    },
+    {
+      "@type": "Property",
+      "name": "deviceStatus",
+      "schema": "string"
+    },
+    {
+      "@type": "Command",
+      "name": "setTemp",
+      "request": {
+        "name": "targetTemp",
+        "schema": "float"
+      }
+    },
+    {
+      "@type": "Command",
+      "name": "reboot",
+      "request": {
+        "name": "delay",
+        "schema": "integer"
+      }
+    },
+    {
+      "@type": "Component",
+      "schema": "dtmi:azure:DeviceManagement:DeviceInformation;1",
+      "name": "deviceInformation",
+      "displayName": "Device Information interface",
+      "description": "Optional interface with basic device hardware information."
+    }
+  ]
+}
