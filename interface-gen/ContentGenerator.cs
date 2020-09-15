@@ -11,11 +11,16 @@ namespace DtdlInterfaceGenerator
     public class ContentGenerator
     {
         const int MAX_COMPONENTS = 5;
+        const int MAX_TELEMETRIES = 10;
+        const int MAX_PROPERTIES = 10;
         Dictionary<string, Content> nodes = new Dictionary<string, Content>();
 
         private static readonly string[] nodeNames = {
-            "temperature", "acceleration", "brightness", "pressure",
-            "tiltAngle", "flowRate", "intensity", "brightness" };
+            "temperature", "acceleration", "brightness", "pressure", "tiltAngle", 
+            "flowRate", "intensity", "brightness", "differentialPressure",
+            "displacement","frequency", "inductance","conductance","angularAcceleration",
+            "moisture","speed","mass","tilt","force","viscosity", "wavelength",
+            "accuracy","weight","powerRange","radiationLevel","voltage" };
 
         private static readonly string[] dtdlTypes = {
             "boolean","date", "dateTime", "double", "duration","float",
@@ -47,7 +52,7 @@ namespace DtdlInterfaceGenerator
         {
             int numNodes = random.Next(0, countNodeNames);
 
-            for (int i = 0; i < numNodes; i++)
+            for (int i = 0; i < MAX_TELEMETRIES; i++)
             {
                 GenerateRandomNode("Telemetry");
             }
@@ -57,7 +62,7 @@ namespace DtdlInterfaceGenerator
         {
             int numNodes = random.Next(0, countNodeNames);
 
-            for (int i = 0; i < numNodes; i++)
+            for (int i = 0; i < MAX_PROPERTIES; i++)
             {
                 GenerateRandomNode("Property");
             }
@@ -143,8 +148,8 @@ namespace DtdlInterfaceGenerator
                 dif++;
             }
 
-            tc.name = versionName;
-            tc.type = type;
+            tc.name = versionName.Trim();
+            tc.type = type.Trim();
             tc.schema = RandomType();
             return tc;
         }
