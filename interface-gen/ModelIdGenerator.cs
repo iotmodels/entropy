@@ -52,7 +52,7 @@ namespace DtdlInterfaceGenerator
         {
             string product = RandomProduct();
             string model = $"dtmi:{RandomDomain()}:{RandomCompany()}:{product}";
-            AbsoluteModelId = await GetUniqueAbsoluteId(model);
+            AbsoluteModelId = await GetUniqueAbsoluteId(model.ToLower());
             ProductName = product.First().ToString().ToUpper() + product.Substring(1);
             return;
         }
@@ -74,17 +74,17 @@ namespace DtdlInterfaceGenerator
 
         private static string RandomDomain()
         {
-            return modelMetadata.topLevelDomains[random.Next(0, countDomains)];
+            return modelMetadata.topLevelDomains[random.Next(0, countDomains)].Trim();
         }
 
         private static string RandomCompany()
         {
-            return modelMetadata.companyNames[random.Next(0, countCompanies)];
+            return modelMetadata.companyNames[random.Next(0, countCompanies)].Trim();
         }
 
         private static string RandomProduct()
         {
-            return modelMetadata.productNames[random.Next(0, countProducts)];
+            return modelMetadata.productNames[random.Next(0, countProducts)].Trim();
         }
     }
 }
