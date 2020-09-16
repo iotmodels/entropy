@@ -32,7 +32,7 @@ namespace IoTModels.Resolvers
             storageConnectionString = connectionString;
             if (string.IsNullOrEmpty(storageConnectionString))
             {
-                Console.WriteLine("ERROR: PrivateRepos require credentials via config 'StorageConnectionString'");
+                log.LogError("ERROR: PrivateRepos require credentials via config 'StorageConnectionString'");
                 Environment.Exit(-1);
             }
             BlobServiceClient blobServiceClient = new BlobServiceClient(storageConnectionString);

@@ -24,6 +24,23 @@ namespace DtdlInterfaceGenerator
         private DtdlV2Interface documentModel = new DtdlV2Interface();
         private List<Content> contents = new List<Content>();
         private string basePath;
+    
+        private ILogger log;
+
+        ILogger logger 
+        {
+            get {
+                if(log == null)
+                {
+                    ILogger<LocalFSResolver> log = LoggerFactory.Create(builder =>
+                        builder
+                        .AddDebug()
+                        .AddConsole()
+                    ).CreateLogger<LocalFSResolver>();
+                }
+                return log;
+            }
+        }
 
         private IResolver _resolver;
         IResolver Resolver
@@ -32,12 +49,6 @@ namespace DtdlInterfaceGenerator
             {
                 if (_resolver == null)
                 {
-                    ILogger<LocalFSResolver> logger = LoggerFactory.Create(builder =>
-                        builder
-                        .AddDebug()
-                        .AddConsole()
-                    ).CreateLogger<LocalFSResolver>();
-
                     var lf = new LoggerFactory();
                     _resolver = new LocalFSResolver(basePath, logger);
                 }
@@ -56,10 +67,16 @@ namespace DtdlInterfaceGenerator
         /// </summary>
         /// <param name="knownDtmis">Set of dtmis that can be used as componenents in the interface</param>
         /// <param name="repoBasePath">Root of the repo where the models are created and stored</param>
+        /// <param name="logger">Optional ILogger to log with</param>
         /// <returns></returns>
-        public static async Task<InterfaceBuilder> GetInterfaceBuilder(IEnumerable<string> knownDtmis, string repoBasePath = ".")
+        public static async Task<InterfaceBuilder> GetInterfaceBuilder(IEnumerable<string> knownDtmis, string repoBasePath = ".", ILogger logger = null)
         {
             InterfaceBuilder ifc = new InterfaceBuilder();
+            if(logger != null)
+            {
+                ifc.log = logger;
+            }
+            
             ifc.basePath = repoBasePath;
             await ifc.SetInterfaceData();
             ifc.AddContents(knownDtmis);

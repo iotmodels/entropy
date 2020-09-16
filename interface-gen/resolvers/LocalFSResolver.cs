@@ -21,7 +21,7 @@ namespace IoTModels.Resolvers
         /// </summary>
         /// <param name="localFolderRoot">the root of the dtmi models to be resolved</param>
         /// <param name="log">logger for output</param>
-        public LocalFSResolver(string localFolderRoot, ILogger<LocalFSResolver> log)
+        public LocalFSResolver(string localFolderRoot, ILogger log)
         {
             logger = log;
             baseFolder = localFolderRoot;

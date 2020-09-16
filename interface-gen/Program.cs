@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Azure.DigitalTwins.Parser;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace DtdlInterfaceGenerator
 {
@@ -23,30 +24,41 @@ namespace DtdlInterfaceGenerator
         /// <returns>int for success or failure</returns>
         static async Task<int> Main(string repoRoot = @"c:\temp\registry", int numCreate = 5, int maxFailures = 25)
         {
-            if (!parametersValid(repoRoot))
+            #if (DEBUG)
+            ILogger<InterfaceBuilder> logger = LoggerFactory.Create(builder =>
+                builder 
+                .AddDebug()
+                .AddConsole()
+            ).CreateLogger<InterfaceBuilder>();
+            #else
+            ILogger<InterfaceBuilder> logger = LoggerFactory.Create(builder =>
+                builder 
+            ).CreateLogger<InterfaceBuilder>();
+            #endif
+
+            if (!parametersValid(repoRoot, logger))
             {
                 return 1;
             }
-
             int numCreated = 0;
             int numFailures = 0;
             KnownInterfaces ki = await KnownInterfaces.GetKnownInterfaces(repoRoot);
 
             while (numCreated < numCreate && numFailures < maxFailures)
             {
-                var ifcBuilder = await InterfaceBuilder.GetInterfaceBuilder(ki.Items, repoRoot.ToString());
+                var ifcBuilder = await InterfaceBuilder.GetInterfaceBuilder(ki.Items, repoRoot.ToString(), logger);
                 try
                 {
                     int numComponents = await ifcBuilder.ValidateModel();
                     await ifcBuilder.WriteToBaseDir();
-                    
+
                     if (numComponents == 0)
                     {
                         await ki.Add(ifcBuilder.DtModelId);
                     }
                     numCreated++;
-                    Console.WriteLine($"{numCreated}: {ifcBuilder.DtModelId}");
-                    Console.WriteLine($"\tcount components: {numComponents}");
+                    logger.LogInformation($"{numCreated}: {ifcBuilder.DtModelId}");
+                    logger.LogInformation($"\tcount components: {numComponents}");
 
                 }
                 catch (ResolutionException rex)
@@ -61,9 +73,9 @@ namespace DtdlInterfaceGenerator
                 }
             }
 
-            Console.WriteLine($"Results:");
-            Console.WriteLine($"\tModels created: {numCreated}");
-            Console.WriteLine($"\tNumber failed:  {numFailures}");
+            logger.LogInformation($"Results:");
+            logger.LogInformation($"\tModels created: {numCreated}");
+            logger.LogInformation($"\tNumber failed:  {numFailures}");
             await ki.SaveItems();
             return 0;
         }
@@ -79,13 +91,13 @@ namespace DtdlInterfaceGenerator
             }
         }
 
-        private static bool parametersValid(string repoRoot)
+        private static bool parametersValid(string repoRoot, ILogger logger)
         {
             var rootDi = new DirectoryInfo(repoRoot);
             if (!rootDi.Exists)
             {
-                Console.WriteLine("The argument given for --repo-root is not a valid folder.");
-                Console.WriteLine($"argument: {repoRoot}");
+                logger.LogError("The argument given for --repo-root is not a valid folder.");
+                logger.LogError($"argument: {repoRoot}");
                 return false;
             }
             return true;
